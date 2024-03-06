@@ -1,0 +1,33 @@
+@import "../../styles/variables";
+
+.sidebarOption {
+  padding: $base12;
+  height: 4 * $base12;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: $clr-2;
+  border-radius: $base8;
+  cursor: pointer;
+
+  > div {
+    display: flex;
+    align-items: center;
+    column-gap: $base12;
+
+    img {
+      max-width: 25px;
+    }
+  }
+
+  > p {
+    width: 25px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: $fs-tiny;
+    background-color: $clr-1;
+    border-radius: 50%;
+  }
+}

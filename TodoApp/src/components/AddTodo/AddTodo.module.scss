@@ -1,0 +1,62 @@
+@import "../../styles/variables";
+
+.addTodo {
+  margin-top: $base8 * 5;
+  padding-block: $base8;
+  padding-inline: $base8 * 2;
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: $base6 * 1.5;
+  font-size: $fs-small;
+  color: $clr-1;
+  background-color: $clr-3;
+  border-radius: 999rem;
+
+  > div {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    column-gap: $base6;
+
+    input {
+      flex: 1 1 auto;
+      color: $clr-1;
+      background-color: inherit;
+      border: none;
+      outline: none;
+
+      &::placeholder {
+        color: $clr-1;
+      }
+    }
+  }
+
+  > button {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $clr-1;
+    background-color: inherit;
+    border: none;
+    outline: none;
+    cursor: pointer;
+
+    &:hover {
+      border-radius: 50%;
+      color: $clr-3;
+      background-color: $clr-1;
+    }
+  }
+
+  svg {
+    width: 1.3em;
+    height: 1.3em;
+    max-width: 36px;
+    max-height: 36px;
+  }
+}

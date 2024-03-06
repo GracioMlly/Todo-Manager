@@ -1,0 +1,8 @@
+@import "../../styles/variables";
+
+.home {
+  padding-top: 3 * $base12;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: $base12 * 1.5;
+}

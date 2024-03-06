@@ -1,0 +1,13 @@
+@import "../../styles/variables";
+
+.todoList {
+  padding-inline-end: $base12;
+  margin-top: $base12;
+  flex: 1 1 300px;
+  width: 100%;
+  max-width: 880px;
+  display: flex;
+  flex-direction: column;
+  row-gap: $base6 * 1.5;
+  overflow-y: scroll;
+}

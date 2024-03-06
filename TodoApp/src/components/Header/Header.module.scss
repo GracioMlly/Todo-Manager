@@ -1,0 +1,19 @@
+@import "../../styles/variables";
+
+.header {
+  flex: 0 1 107px;
+
+  > p:nth-child(1) {
+    font-size: $fs-600;
+  }
+  > p:nth-child(2) {
+    margin-top: 0.5 * $base6;
+    font-size: $fs-500;
+    color: $clr-4;
+  }
+
+  > svg {
+    margin-top: $base8 * 2;
+  }
+}
+

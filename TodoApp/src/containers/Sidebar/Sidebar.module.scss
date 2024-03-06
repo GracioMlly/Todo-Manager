@@ -1,0 +1,24 @@
+@import "../../styles/variables";
+
+.sidebar {
+  padding-top: 3 * $base12;
+  padding-inline: $base12;
+  display: flex;
+  flex-direction: column;
+  row-gap: 2 * $base12;
+  background-color: $clr-1;
+  border-radius: $base8;
+
+  > p {
+    font-size: $fs-600;
+  }
+
+  > ul:nth-child(2) {
+    padding-inline-end: $base12;
+    display: flex;
+    flex-direction: column;
+    flex: 0 1 40%;
+    row-gap: $base12 * 1.5;
+    overflow-y: auto;
+  }
+}
