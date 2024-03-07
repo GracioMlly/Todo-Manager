@@ -24,13 +24,13 @@ const Todo = ({ todo }) => {
   const deadline = new Date(todo.deadline).toLocaleDateString();
 
   const [
-    ,
+    todos,
     dispatchTodos,
     getAllTodos,
-    ,
+    isLoading,
     setIsLoading,
     categories,
-    ,
+    dispatchCategories,
     getAllCategories,
   ] = useTodos();
 
@@ -77,7 +77,10 @@ const Todo = ({ todo }) => {
     setIsLoading(true);
     axios
       .delete(`http://localhost:8000/tasks/${todo.id}`)
-      .then(() => getAllTodos())
+      .then(() => {
+        getAllTodos();
+        getAllCategories();
+      })
       .catch((error) => {
         console.error(error);
         setIsLoading(false);
