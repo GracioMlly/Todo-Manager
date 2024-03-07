@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import classes from "./Todo.module.scss";
 import { AiOutlineDelete } from "react-icons/ai";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
-import { AiOutlineCheckCircle } from "react-icons/ai";
 import { AiOutlinePlus } from "react-icons/ai";
 import { RiSendPlaneLine } from "react-icons/ri";
 import { useTodos } from "../../context/todoCtx";
@@ -22,11 +21,18 @@ import {
 
 const Todo = ({ todo }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [, dispatchTodos, getAllTodos] = useTodos();
-  const [isUpdating, setIsUpdating] = useState(false);
-  const [update, setUpdate] = useState(todo.description);
-  const setIsLoading = useTodos().at(4);
-  const categories = useTodos().at(5);
+  const deadline = new Date(todo.deadline).toLocaleDateString();
+
+  const [
+    ,
+    dispatchTodos,
+    getAllTodos,
+    ,
+    setIsLoading,
+    categories,
+    ,
+    getAllCategories,
+  ] = useTodos();
 
   const [formState, setFormState] = useState({
     id: "",
@@ -57,14 +63,14 @@ const Todo = ({ todo }) => {
     axios
       .put(`http://localhost:8000/tasks/${todo.id}`, data)
       .then(() => {
-        setIsUpdating(false);
         getAllTodos();
+        getAllCategories();
       })
       .catch((error) => {
         console.error(error);
-        setIsLoading(false);
         dispatchTodos({ type: "error" });
-      });
+      })
+      .finally(() => setIsLoading(false));
   };
 
   const deleteTodo = () => {
@@ -91,10 +97,28 @@ const Todo = ({ todo }) => {
             justifyContent="center"
             alignItems="center"
             fontSize="12px"
-            height="fit-content"
-            
           >
             {todo.category}
+          </Badge>
+          <Badge
+            as="p"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            fontSize="12px"
+            flex="0 0 20px"
+          >
+            {todo.priority}
+          </Badge>
+          <Badge
+            as="p"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            fontSize="12px"
+            flex="0 0 80px"
+          >
+            {deadline}
           </Badge>
           <button className={classes.modify} onClick={handleClick}>
             <HiOutlinePencilSquare />

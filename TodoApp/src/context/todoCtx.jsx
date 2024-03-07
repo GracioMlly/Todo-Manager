@@ -37,10 +37,15 @@ const categoriesReducer = (state, action) => {
     }
   }
 };
+
 const TodoProvider = ({ children }) => {
   const [todos, dispatchTodos] = useReducer(todosReducer, []);
   const [categories, dispatchCategories] = useReducer(categoriesReducer, []);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState({
+    id: "1",
+    name: "",
+  });
 
   const getAllTodos = async () => {
     try {
@@ -63,7 +68,6 @@ const TodoProvider = ({ children }) => {
       const data = response.data;
       dispatchCategories({ type: "getAllCategories", payload: data });
     } catch (error) {
-      console.error(error);
       dispatchCategories({ type: "error" });
     } finally {
       setIsLoading(false);
@@ -74,8 +78,8 @@ const TodoProvider = ({ children }) => {
     getAllTodos();
     getAllCategories();
   }, []);
-  console.log(`todos :`, todos)
-  console.log(`categories :`, categories)
+  // console.log(`todos :`, todos);
+  // console.log(`categories :`, categories);
 
   return (
     <todoCtx.Provider
@@ -87,6 +91,9 @@ const TodoProvider = ({ children }) => {
         setIsLoading,
         categories,
         dispatchCategories,
+        getAllCategories,
+        selectedCategory,
+        setSelectedCategory,
       }}
     >
       {children}
@@ -104,6 +111,8 @@ export const useTodos = () => {
     categories,
     dispatchCategories,
     getAllCategories,
+    selectedCategory,
+    setSelectedCategory,
   } = useContext(todoCtx);
   return [
     todos,
@@ -114,6 +123,8 @@ export const useTodos = () => {
     categories,
     dispatchCategories,
     getAllCategories,
+    selectedCategory,
+    setSelectedCategory,
   ];
 };
 

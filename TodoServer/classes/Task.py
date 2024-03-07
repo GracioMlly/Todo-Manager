@@ -13,7 +13,7 @@ class Task(BaseModel):
     def __init__(self, **task):
         super().__init__(**task)
         if self.category == None or self.category == "":
-            self.category = "default"
+            self.category = "Sans catégorie"
 
     def __lt__(self, other):
         return self.deadline.toordinal() < other.deadline.toordinal()

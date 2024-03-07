@@ -5,12 +5,19 @@ import { RiSendPlaneLine } from "react-icons/ri";
 import { useTodos } from "../../context/todoCtx";
 import Task from "../../classes/Task/Task";
 import axios from "axios";
-import { Select, Input} from "@chakra-ui/react";
+import { Select, Input } from "@chakra-ui/react";
 
 const AddTodo = () => {
-  const [, dispatchTodos, getAllTodos] = useTodos();
-  const setIsLoading = useTodos().at(4);
-  const categories = useTodos().at(5);
+  const [
+    todos,
+    dispatchTodos,
+    getAllTodos,
+    isLoading,
+    setIsLoading,
+    categories,
+    dispatchCategories,
+    getAllCategories,
+  ] = useTodos();
 
   const [formState, setFormState] = useState({
     id: "",
@@ -40,6 +47,7 @@ const AddTodo = () => {
         .post("http://localhost:8000/tasks", todo)
         .then(() => {
           getAllTodos();
+          getAllCategories();
           setFormState({
             id: "",
             description: "",

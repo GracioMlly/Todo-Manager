@@ -6,3 +6,5 @@ class Category {
         this.tasks = []
     }
 }
+
+export default Category

@@ -139,6 +139,7 @@ async def delete_category(categoryId: str):
         priority_lists_updater(tasksByPriorityOrder)
 
         categoriesList.remove(categoryToDelete)
+        Category.all_categories_name.remove(categoryToDelete.name)
 
         return {
             "message": "la catégorie a été supprimée",

@@ -1,0 +1,9 @@
+@import "../../styles/variables";
+
+.isSelected {
+    background-color: $clr-2;
+
+    > p:nth-child(3) {
+        background-color: #fff;
+    }
+  }
