@@ -6,6 +6,7 @@ import {
   Icon,
   InputRightElement,
   IconButton,
+  useToast,
 } from "@chakra-ui/react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { RiSendPlaneLine } from "react-icons/ri";
@@ -14,6 +15,7 @@ import { useTodos } from "../../context/todoCtx";
 import axios from "axios";
 
 const AddCategory = () => {
+  const toast = useToast();
   const [, , , , setIsLoading, , , getAllCategories] = useTodos();
   const [categoryName, setCategoryName] = useState("");
 
@@ -25,9 +27,22 @@ const AddCategory = () => {
       const category = new Category(categoryName);
       axios
         .post("http://localhost:8000/categories", category)
-        .then(() => {
+        .then((response) => {
+          const {
+            data: {
+              message,
+              catégorie: { name },
+            },
+          } = response;
           setCategoryName("");
           getAllCategories();
+          toast({
+            position: "top-left",
+            duration: "2000",
+            status: "success",
+            title: message,
+            description: name,
+          });
         })
         .catch((error) => {
           console.error(error);

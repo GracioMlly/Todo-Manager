@@ -1,11 +1,12 @@
 import React from "react";
 import classes from "./SidebarOption.module.scss";
 import { useTodos } from "../../context/todoCtx";
-import { IconButton, Box } from "@chakra-ui/react";
+import { IconButton, Box, useToast } from "@chakra-ui/react";
 import { AiOutlineDelete } from "react-icons/ai";
 import axios from "axios";
 
 const SidebarOption = ({ category, selectCategory, selectedCategory }) => {
+  const toast = useToast();
   const numberOfTask = category.tasks.length;
   const name = category.name;
   const id = category.id;
@@ -24,10 +25,23 @@ const SidebarOption = ({ category, selectCategory, selectedCategory }) => {
     setIsLoading(true);
     axios
       .delete(`http://localhost:8000/categories/${id}`)
-      .then(() => {
+      .then((response) => {
+        const {
+          data: {
+            message,
+            catégorie: { name },
+          },
+        } = response;
         getAllTodos();
         getAllCategories();
         selectCategory({ id: "1" });
+        toast({
+          position: "top-left",
+          duration: "2000",
+          status: "success",
+          title: message,
+          description: name,
+        });
       })
       .catch((error) => {
         console.error(error);

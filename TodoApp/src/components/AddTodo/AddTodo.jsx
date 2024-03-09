@@ -5,9 +5,10 @@ import { RiSendPlaneLine } from "react-icons/ri";
 import { useTodos } from "../../context/todoCtx";
 import Task from "../../classes/Task/Task";
 import axios from "axios";
-import { Select, Input } from "@chakra-ui/react";
+import { Select, Input, useToast } from "@chakra-ui/react";
 
 const AddTodo = () => {
+  const toast = useToast();
   const [
     todos,
     dispatchTodos,
@@ -45,7 +46,14 @@ const AddTodo = () => {
       console.log(todo);
       axios
         .post("http://localhost:8000/tasks", todo)
-        .then(() => {
+        .then((response) => {
+          console.log(response);
+          const {
+            data: {
+              message,
+              tâche: { description },
+            },
+          } = response;
           getAllTodos();
           getAllCategories();
           setFormState({
@@ -54,6 +62,13 @@ const AddTodo = () => {
             priority: "",
             deadline: "",
             category: "",
+          });
+          toast({
+            position: "top-left",
+            duration: "2000",
+            status: "success",
+            title: message,
+            description: description,
           });
         })
         .catch((error) => {

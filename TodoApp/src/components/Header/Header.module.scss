@@ -1,19 +1,32 @@
 @import "../../styles/variables";
 
 .header {
+  padding-inline-end: $base12;
   flex: 0 1 107px;
+  max-width: 880px;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: $base12 * 3;
+  row-gap: $base12 * 2;
 
-  > p:nth-child(1) {
-    font-size: $fs-600;
-  }
-  > p:nth-child(2) {
-    margin-top: 0.5 * $base6;
-    font-size: $fs-500;
-    color: $clr-4;
+  > div {
+    > p:nth-child(1) {
+      font-size: $fs-600;
+    }
+
+    > p:nth-child(2) {
+      margin-top: 0.5 * $base6;
+      font-size: $fs-500;
+      color: $clr-4;
+    }
+
+    > svg {
+      margin-top: $base8 * 2;
+    }
   }
 
-  > svg {
-    margin-top: $base8 * 2;
+  button {
+    border: none;
+    cursor: pointer;
   }
 }
-

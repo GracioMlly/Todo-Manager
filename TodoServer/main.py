@@ -31,8 +31,7 @@ async def get_tasks(filter: str | None = None):
     try:
         if filter == "date":
             return sorted(
-                tasksByDeadline.queue, key=lambda task: task.deadline, reverse=True
-            )
+                tasksByDeadline.queue, key=lambda task: task.deadline)
         elif filter == "order":
             return sorted(
                 tasksByPriorityOrder.queue, key=lambda task: task.priority, reverse=True

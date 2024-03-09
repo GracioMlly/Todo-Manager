@@ -1,8 +1,8 @@
 import React from "react";
 import classes from "./Header.module.scss";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useTodos } from "../../context/todoCtx";
-import { Spinner } from "@chakra-ui/react";
+import { Spinner, Box } from "@chakra-ui/react";
+import MenuHeader from "../MenuHeader/MenuHeader";
 
 const Header = () => {
   const options = {
@@ -17,19 +17,23 @@ const Header = () => {
 
   return (
     <div className={classes.header}>
-      <p className="emphasize">Bienvenue, Utilisateur!👋</p>
-      <p>Aujourd'hui, {date}</p>
+      <div>
+        <p className="emphasize">Bienvenue, Utilisateur!👋</p>
+        <p>Aujourd'hui, {date}</p>
 
-      {isLoading && (
-        <Spinner
-          as="svg"
-          thickness="2px"
-          speed="0.75s"
-          emptyColor="gray.200"
-          color="black"
-          boxSize="18px"
-        />
-      )}
+        {isLoading && (
+          <Spinner
+            as="svg"
+            thickness="2px"
+            speed="0.75s"
+            emptyColor="gray.200"
+            color="black"
+            boxSize="18px"
+          />
+        )}
+      </div>
+
+      <MenuHeader />
     </div>
   );
 };

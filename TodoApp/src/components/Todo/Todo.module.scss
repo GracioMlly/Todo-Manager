@@ -5,22 +5,21 @@
   padding-inline: $base8 * 1.5;
   flex: 0 0 48px;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   column-gap: $base8 * 2;
+  row-gap: $base8 * 2;
   background-color: $clr-1;
   border-radius: $base8;
 
   > p {
-    align-self: center;
-    width: calc(100% - 130px);
     text-wrap: pretty;
   }
 
   > div {
-    align-self: flex-start;
     display: flex;
-    justify-content: flex-end;
     align-items: center;
-    column-gap: $base8 * 2;
+    column-gap: $base8 * 4;
 
     button {
       width: 32px;
@@ -121,5 +120,12 @@
     height: 1.3em;
     max-width: 36px;
     max-height: 36px;
+  }
+}
+
+@media (width <= 1235px) {
+  .todo {
+    flex-direction: column;
+    align-items: unset;
   }
 }

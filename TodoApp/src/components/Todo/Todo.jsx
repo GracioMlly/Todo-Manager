@@ -17,12 +17,13 @@ import {
   Select,
   Input,
   Badge,
+  useToast
 } from "@chakra-ui/react";
 
 const Todo = ({ todo }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const deadline = new Date(todo.deadline).toLocaleDateString();
-
+  const toast = useToast()
   const [
     todos,
     dispatchTodos,
@@ -62,9 +63,21 @@ const Todo = ({ todo }) => {
     const data = structuredClone(formState);
     axios
       .put(`http://localhost:8000/tasks/${todo.id}`, data)
-      .then(() => {
+      .then((response) => {
+        const {
+          data: {
+            message,
+            tâche: { description },
+          },
+        } = response;
         getAllTodos();
         getAllCategories();
+        toast({
+          position: "top-left",
+          duration: "2000",
+          title: message,
+          description: description,
+        });
       })
       .catch((error) => {
         console.error(error);
@@ -77,9 +90,21 @@ const Todo = ({ todo }) => {
     setIsLoading(true);
     axios
       .delete(`http://localhost:8000/tasks/${todo.id}`)
-      .then(() => {
+      .then((response) => {
+        const {
+          data: {
+            message,
+            tâche: { description },
+          },
+        } = response;
         getAllTodos();
         getAllCategories();
+        toast({
+          position: "top-left",
+          duration: "2000",
+          title: message,
+          description: description,
+        });
       })
       .catch((error) => {
         console.error(error);
