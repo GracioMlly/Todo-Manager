@@ -5,21 +5,23 @@
   padding-inline: $base8 * 1.5;
   flex: 0 0 48px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  column-gap: $base8 * 2;
+  flex-wrap: wrap;
   row-gap: $base8 * 2;
   background-color: $clr-1;
   border-radius: $base8;
 
   > p {
+    flex: 1 1 400px;
     text-wrap: pretty;
   }
 
   > div {
+    flex: 0 1 auto;
     display: flex;
     align-items: center;
-    column-gap: $base8 * 4;
+    justify-content: flex-end;
+    column-gap: $base8 * 3;
 
     button {
       width: 32px;

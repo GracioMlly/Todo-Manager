@@ -5,24 +5,36 @@ from uuid import uuid4
 
 
 class Category(BaseModel):
-    id: str | None = None
-    name: str
-    tasks: list[Task] | None = None
+    # Classe utilisée pour la création d'une catégorie
 
-    all_categories_name: ClassVar[list[str]] = []
+    id: str | None = None  # Son id
+    name: str  # Son nom
+    tasks: list[Task] | None = None  # Sa liste de tâche
 
-    def __init__(self, **category):
-        super().__init__(**category)
+    all_categories_name: ClassVar[list[str]] = [
+        "Sans catégorie"
+    ]  # Liste des noms de toutes les catégories crées ~ Variable statique
+
+    # Utilisation d'un keyword argument ~ args
+    def __init__(self, **args):
+
+        # Déballage de args
+        super().__init__(**args)
+
+        # Initialisation de la liste des tâches vides et l'id
         if self.tasks == None:
             self.tasks = []
         if self.id == None:
             self.id = str(uuid4())
 
+    # Ajoute une tâche dans la liste des tâches de la catégorie
     def add_task(self, task: Task):
         self.tasks.append(task)
 
+    # Supprime une tâche de la liste des taches de la catégorie
     def delete_task(self, value: Task | str):
         try:
+            # Traitement de suppression suivant la valeur de 'value' (une objet Task ou l'id)
             if type(value) is str:
                 task = next(task for task in self.tasks if task.id == value)
                 self.tasks.remove(task)

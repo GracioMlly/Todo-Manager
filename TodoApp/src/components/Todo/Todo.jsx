@@ -17,13 +17,13 @@ import {
   Select,
   Input,
   Badge,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
 
 const Todo = ({ todo }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const deadline = new Date(todo.deadline).toLocaleDateString();
-  const toast = useToast()
+  const toast = useToast();
   const [
     todos,
     dispatchTodos,
@@ -134,7 +134,7 @@ const Todo = ({ todo }) => {
             justifyContent="center"
             alignItems="center"
             fontSize="12px"
-            flex="0 0 20px"
+            flex="0 1 20px"
           >
             {todo.priority}
           </Badge>
@@ -144,7 +144,7 @@ const Todo = ({ todo }) => {
             justifyContent="center"
             alignItems="center"
             fontSize="12px"
-            flex="0 0 80px"
+            flex="0 1 80px"
           >
             {deadline}
           </Badge>
