@@ -10,12 +10,7 @@ import AddSubcategoryModal from "../AddSubcategoryModal/AddSubcategoryModal";
 const SidebarOption = ({ category, selectCategory, selectedCategory }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
-  const numberOfTask =
-    category.tasks.length +
-    category.subcategories.reduce(
-      (total, cat) => (total += cat.tasks.length),
-      0
-    );
+  const numberOfTask = category.tasks.length;
   const name = category.name;
   const id = category.id;
   const [

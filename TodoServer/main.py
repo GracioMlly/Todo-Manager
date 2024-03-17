@@ -91,9 +91,7 @@ async def update_task(taskId: str, task: Task):
             #     for category in categoriesList
             #     if category.name == taskToUpdate.category
             # )
-            update_task_category(
-                taskToUpdate, task, isRoot=False
-            )
+            update_task_category(taskToUpdate, task, isRoot=False)
 
         # On met à jour finalement la tâche
         taskToUpdate.update(**task.model_dump())
@@ -227,6 +225,45 @@ async def create_subcategory(categoryId: str, subcategory: Category):
         return {"message": "La sous-catégorie n'a pas été crée"}
 
 
+# Pour supprimer une sous-catégorie
+@app.delete("/categories/{categoryId}/{subcategoryId}")
+async def delete_category(categoryId: str, subcategoryId: str):
+    # On récupère dans le paramètre 'categoryId' l'id de la category avec l'url /category/{subcategoryId}
+    # On récupère dans le paramètre 'subcategoryId' l'id de la sous-catégorie avec l'url /category/{subcategoryId}
+    try:
+        # On cherche la sous-catégorie à supprimer
+        rootCategory = next(
+            category for category in categoriesList if category.id == categoryId
+        )
+
+        subcategoryToDelete = next(
+            category
+            for category in rootCategory.subcategories
+            if category.id == subcategoryId
+        )
+
+        # On supprime les tâches de cette sous-catégorie dans :
+        # -> la liste des tâches
+        # -> la file, la pile
+        # -> la catégorie (Racine)
+        for task in subcategoryToDelete.tasks:
+            tasksList.remove(task)
+            category_tasks_updater(task, categoriesList)
+        priority_lists_updater(tasksByDeadline)
+        priority_lists_updater(tasksByPriorityOrder)
+
+        # On retire la sous-catégorie dans la catégorie Racine
+        rootCategory.delete_subcategory(subcategoryToDelete)
+
+        return {
+            "message": "La sous-catégorie a été supprimée",
+            "sous-catégorie": subcategoryToDelete,
+        }
+    except Exception as error:
+        print(error)
+        return {"message": "La sous-catégorie n'a pas pu être supprimée"}
+
+
 ###############################################################################################
 
 """ Fonctions utilitaires """
@@ -239,7 +276,7 @@ def priority_lists_updater(structure: PriorityQueue | LifoQueue):
     structure.queue = tasksList.copy()
 
 
-# Met à jour la liste des tâches d'une catégorie
+# Pour la suppression des tâches d'une catégorie
 def category_tasks_updater(task: Task, categoriesList: list[Category]):
     # Le paramètre 'task' est la tâche à supprimer
     # Le paramètre 'categoriesList' est la liste des catégories
@@ -250,6 +287,14 @@ def category_tasks_updater(task: Task, categoriesList: list[Category]):
         )
         # On supprime la tâche de sa liste de tâches
         categoryToUpdate.delete_task(task)
+
+        if task.subcategory != "":
+            subcategory = next(
+                category
+                for category in categoryToUpdate.subcategories
+                if category.name == task.subcategory
+            )
+            subcategory.delete_task(task)
     except Exception as error:
         print(error)
 
@@ -257,7 +302,7 @@ def category_tasks_updater(task: Task, categoriesList: list[Category]):
 # Gère une catégorie et sa tâche
 def category_manager(task: Task, categoriesList: list[Category]):
     # Le paramètre 'task' est la tâche
-    # Le paramètre 'categoriesList' est la liste des catégories
+    # Le paramètre 'categoriesList' est une liste de catégories
     try:
         # Si la catégorie de la tâche existe
         if task.category in Category.all_categories_name:
@@ -273,6 +318,7 @@ def category_manager(task: Task, categoriesList: list[Category]):
                 # On ajoute la tâche à sa liste de tâches
                 category.add_task(task)
             else:
+                category.add_task(task)
                 subcategory = next(
                     subcategory
                     for subcategory in category.subcategories
@@ -385,64 +431,99 @@ def update_task_category(
     task: Task,
     # categoriesList: list[Category],
     isRoot=True,
-    allCategories: list[Category]=categoriesList,
-    allSubcategories: list[Category]=subcategoriesList,
+    allCategories: list[Category] = categoriesList,
+    allSubcategories: list[Category] = subcategoriesList,
 ):
     # Le paramètre 'taskToUpdate' est la tâche dont la catégorie change
     # Le paramètre 'task' est la tâche qui est censée remplacée 'taskToUpdate'
-    # Le paramètre 'categoriesList' est une liste de catégories
     # Le paramètre 'isRoot' permet de séparer certains traitements des racines des noeuds
+    # Le paramètre 'allCategories' est la liste de catégories
+    # Le paramètre 'allSubcategories' est la liste de sous-catégories
     try:
         # On récupère l'id de taskToUpdate
         taskId = taskToUpdate.id
 
-        # On cherche l'ancienne catégorie
-        oldCategory = None
-        newCategory = None
-
-        # Traitement si c'est une racine
+        # Traitement si c'est un simple noeud
         if isRoot:
-            oldCategory = next(
+            # oldCategory = next(
+            #     category
+            #     for category in allCategories
+            #     if category.name == taskToUpdate.category
+            # )
+
+            # #  On vérifie si la nouvelle catégorie existe
+            # if does_this_category_already_exist(task.category, allCategories):
+            #     # On la recherche
+            #     newCategory = next(
+            #         category
+            #         for category in allCategories
+            #         if category.name == task.category
+            #     )
+
+            #     # On lui ajoute la tâche à mettre à jour
+            #     newCategory.add_task(taskToUpdate)
+            # else:
+            #     # Sinon on crée la nouvelle catégorie et on lui ajoute la tâche
+            #     print("pas trouvé")
+            #     category_manager(task, allCategories)
+
+            # #  On supprime 'taskToUpdate' de l'ancienne catégorie
+            # oldCategory.delete_task(taskId)
+
+            # Traitement si c'est une catégorie Racine
+            oldRootCategory = next(
                 category
                 for category in allCategories
                 if category.name == taskToUpdate.category
             )
 
-            #  On vérifie si la nouvelle catégorie existe
-            if does_this_category_already_exist(task.category, allCategories):
-                # On la recherche
-                newCategory = next(
+            newRootCategory = next(
+                category for category in allCategories if category.name == task.category
+            )
+
+            if taskToUpdate.subcategory != "":
+                oldSubcategory = next(
                     category
-                    for category in allCategories
-                    if category.name == task.category
+                    for category in oldRootCategory.subcategories
+                    if category.name == taskToUpdate.subcategory
                 )
-
-                # On lui ajoute la tâche à mettre à jour
-                newCategory.add_task(taskToUpdate)
+                oldRootCategory.delete_task(taskId)
+                oldSubcategory.delete_task(taskId)
             else:
-                # Sinon on crée la nouvelle catégorie et on lui ajoute la tâche
-                print("pas trouvé")
-                category_manager(task, allCategories)
+                oldRootCategory.delete_task(taskId)
 
-            #  On supprime 'taskToUpdate' de l'ancienne catégorie
-            oldCategory.delete_task(taskId)
-
+            if task.subcategory != "":
+                newSubCategory = next(
+                    category
+                    for category in newRootCategory.subcategories
+                    if category.name == task.subcategory
+                )
+                newRootCategory.add_task(taskToUpdate)
+                newSubCategory.add_task(taskToUpdate)
+            else:
+                newRootCategory.add_task(taskToUpdate)
         else:
-            # Traitement si c'est un simple noeud
-            oldCategory = next(
+            rootCategory = next(
                 category
-                for category in allSubcategories
-                if category.name == taskToUpdate.subcategory
+                for category in allCategories
+                if category.name == taskToUpdate.category
             )
 
-            newCategory = next(
-                category
-                for category in allSubcategories
-                if category.name == task.subcategory
-            )
+            if taskToUpdate.subcategory != "":
+                oldSubcategory = next(
+                    category
+                    for category in rootCategory.subcategories
+                    if category.name == taskToUpdate.subcategory
+                )
+                oldSubcategory.delete_task(taskId)
 
-            newCategory.add_task(taskToUpdate)
-            oldCategory.delete_task(taskId)
+            if task.subcategory != "":
+                newSubCategory = next(
+                    category
+                    for category in rootCategory.subcategories
+                    if category.name == task.subcategory
+                )
+                newSubCategory.add_task(taskToUpdate)
 
     except Exception as error:
         print(error)

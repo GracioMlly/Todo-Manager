@@ -68,7 +68,7 @@ const Sidebar = () => {
             key={category.id}
             category={category}
             selectCategory={selectCategory}
-            selectedCategory={selectedSubcat}
+            selectedSubCategory={selectedSubcat}
           />
         ))}
       </Box>

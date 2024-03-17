@@ -5,7 +5,7 @@ import { IconButton, Box, useToast } from "@chakra-ui/react";
 import { AiOutlineDelete } from "react-icons/ai";
 import axios from "axios";
 
-const SidebarSubcat = ({ category, selectCategory, selectedCategory }) => {
+const SidebarSubcat = ({ category, selectCategory, selectedSubCategory }) => {
   const toast = useToast();
   const numberOfTask = category.tasks.length;
   const name = category.name;
@@ -19,17 +19,21 @@ const SidebarSubcat = ({ category, selectCategory, selectedCategory }) => {
     categories,
     dispatchCategories,
     getAllCategories,
+    selectedCategory,
+    setSelectedCategory,
+    selectedSubcat,
+    setSelectedSubcat,
   ] = useTodos();
 
-  const delete_category = () => {
+  const delete_subcategory = () => {
     setIsLoading(true);
     axios
-      .delete(`http://localhost:8000/categories/${id}`)
+      .delete(`http://localhost:8000/categories/${selectedCategory.id}/${id}`)
       .then((response) => {
         const {
           data: {
             message,
-            catégorie: { name },
+            "sous-catégorie": { name },
           },
         } = response;
         getAllTodos();
@@ -53,7 +57,7 @@ const SidebarSubcat = ({ category, selectCategory, selectedCategory }) => {
   return (
     <li
       className={`${classes.sidebarOption} ${
-        id === selectedCategory.id ? classes.isSelected : ""
+        id === selectedSubCategory.id ? classes.isSelected : ""
       }`}
       onClick={() => selectCategory(category, true)}
     >
@@ -63,7 +67,7 @@ const SidebarSubcat = ({ category, selectCategory, selectedCategory }) => {
       <Box as="p" ml="auto" mr="8px">
         {numberOfTask}
       </Box>
-      {id === selectedCategory.id && (
+      {id === selectedSubCategory.id && (
         <>
           <IconButton
             icon={<AiOutlineDelete />}
@@ -76,7 +80,7 @@ const SidebarSubcat = ({ category, selectCategory, selectedCategory }) => {
             borderRadius="50%"
             backgroundColor="inherit"
             cursor="pointer"
-            onClick={delete_category}
+            onClick={delete_subcategory}
           />
         </>
       )}
