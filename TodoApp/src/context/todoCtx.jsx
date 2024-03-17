@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 import axios from "axios";
-// import data from "../assets/data";
+import Category from "../classes/Category/Category";
 
 const todoCtx = createContext();
 
@@ -46,6 +46,7 @@ const TodoProvider = ({ children }) => {
     id: "1",
     name: "",
   });
+  const [selectedSubcat, setSelectedSubcat] = useState(new Category(""));
 
   const getAllTodos = async () => {
     try {
@@ -94,6 +95,8 @@ const TodoProvider = ({ children }) => {
         getAllCategories,
         selectedCategory,
         setSelectedCategory,
+        selectedSubcat,
+        setSelectedSubcat,
       }}
     >
       {children}
@@ -113,6 +116,8 @@ export const useTodos = () => {
     getAllCategories,
     selectedCategory,
     setSelectedCategory,
+    selectedSubcat,
+    setSelectedSubcat,
   } = useContext(todoCtx);
   return [
     todos,
@@ -125,6 +130,8 @@ export const useTodos = () => {
     getAllCategories,
     selectedCategory,
     setSelectedCategory,
+    selectedSubcat,
+    setSelectedSubcat,
   ];
 };
 

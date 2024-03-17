@@ -1,21 +1,13 @@
 import React from "react";
 import classes from "./SidebarOption.module.scss";
 import { useTodos } from "../../context/todoCtx";
-import { IconButton, Box, useToast, useDisclosure } from "@chakra-ui/react";
+import { IconButton, Box, useToast } from "@chakra-ui/react";
 import { AiOutlineDelete } from "react-icons/ai";
-import { MdSubject } from "react-icons/md";
 import axios from "axios";
-import AddSubcategoryModal from "../AddSubcategoryModal/AddSubcategoryModal";
 
-const SidebarOption = ({ category, selectCategory, selectedCategory }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+const SidebarSubcat = ({ category, selectCategory, selectedCategory }) => {
   const toast = useToast();
-  const numberOfTask =
-    category.tasks.length +
-    category.subcategories.reduce(
-      (total, cat) => (total += cat.tasks.length),
-      0
-    );
+  const numberOfTask = category.tasks.length;
   const name = category.name;
   const id = category.id;
   const [
@@ -63,7 +55,7 @@ const SidebarOption = ({ category, selectCategory, selectedCategory }) => {
       className={`${classes.sidebarOption} ${
         id === selectedCategory.id ? classes.isSelected : ""
       }`}
-      onClick={() => selectCategory(category)}
+      onClick={() => selectCategory(category, true)}
     >
       <div>
         <p>{name}</p>
@@ -73,24 +65,6 @@ const SidebarOption = ({ category, selectCategory, selectedCategory }) => {
       </Box>
       {id === selectedCategory.id && (
         <>
-          <AddSubcategoryModal
-            isOpen={isOpen}
-            onClose={onClose}
-            categoryId={id}
-          />
-          <IconButton
-            icon={<MdSubject />}
-            border="none"
-            w="40px"
-            h="40px"
-            _hover={{
-              backgroundColor: "#fff",
-            }}
-            borderRadius="50%"
-            backgroundColor="inherit"
-            cursor="pointer"
-            onClick={onOpen}
-          />
           <IconButton
             icon={<AiOutlineDelete />}
             border="none"
@@ -110,4 +84,4 @@ const SidebarOption = ({ category, selectCategory, selectedCategory }) => {
   );
 };
 
-export default SidebarOption;
+export default SidebarSubcat;

@@ -12,5 +12,8 @@ tasksByDeadline = PriorityQueue()
 tasksByPriorityOrder = LifoQueue()
 
 # La liste des catégories
-sans_categorie = Category(id=None, name="Sans catégorie", tasks=None)
+sans_categorie = Category(name="Sans catégorie")
 categoriesList: list[Category] = [sans_categorie]
+
+# La liste des sous-catégories
+subcategoriesList: list[Category] = []

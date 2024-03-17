@@ -18,7 +18,7 @@ const Header = () => {
   return (
     <div className={classes.header}>
       <div>
-        <p className="emphasize">Bienvenue, Utilisateur!👋</p>
+        <p className="emphasize">Bienvenue👋</p>
         <p>Aujourd'hui, {date}</p>
 
         {isLoading && (

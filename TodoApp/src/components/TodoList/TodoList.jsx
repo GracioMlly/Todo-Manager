@@ -15,16 +15,21 @@ const TodoList = () => {
     getAllCategories,
     selectedCategory,
     setSelectedCategory,
+    selectedSubcat,
   ] = useTodos();
 
   let filteredTodos = [];
   if (selectedCategory.id == "1") {
     filteredTodos = structuredClone(todos);
   } else {
-    const temp = structuredClone(todos);
-    filteredTodos = temp.filter(
-      (todo) => todo.category === selectedCategory.name
-    );
+    if (selectedSubcat.name) {
+      filteredTodos = structuredClone(selectedSubcat.tasks);
+    } else {
+      const temp = structuredClone(todos);
+      filteredTodos = temp.filter(
+        (todo) => todo.category === selectedCategory.name
+      );
+    }
   }
 
   return (

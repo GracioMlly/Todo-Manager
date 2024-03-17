@@ -26,7 +26,12 @@ const AddTodo = () => {
     priority: "",
     deadline: "",
     category: "",
+    subcategory: "",
   });
+
+  const subcategoriesList =
+    categories.find((category) => category.name === formState.category)
+      ?.subcategories ?? [];
 
   const handleChange = (event) => {
     setFormState((prevState) => {
@@ -41,13 +46,19 @@ const AddTodo = () => {
     event.preventDefault();
     if (formState.priority && formState.deadline && formState.description) {
       setIsLoading(true);
-      const { description, priority, deadline, category } = formState;
-      const todo = new Task(description, priority, deadline, category);
+      const { description, priority, deadline, category, subcategory } =
+        formState;
+      const todo = new Task(
+        description,
+        priority,
+        deadline,
+        category,
+        subcategory
+      );
       console.log(todo);
       axios
         .post("http://localhost:8000/tasks", todo)
         .then((response) => {
-          console.log(response);
           const {
             data: {
               message,
@@ -90,6 +101,22 @@ const AddTodo = () => {
         onChange={handleChange}
       >
         {categories.map((category) => (
+          <option key={category.id} value={category.name}>
+            {category.name}
+          </option>
+        ))}
+      </Select>
+
+      <Select
+        variant="filled"
+        marginTop="40px"
+        cursor="pointer"
+        placeholder="Sous-catégorie"
+        name="subcategory"
+        value={formState.subcategory}
+        onChange={handleChange}
+      >
+        {subcategoriesList.map((category) => (
           <option key={category.id} value={category.name}>
             {category.name}
           </option>

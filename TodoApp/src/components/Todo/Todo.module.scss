@@ -124,10 +124,3 @@
     max-height: 36px;
   }
 }
-
-@media (width <= 1235px) {
-  .todo {
-    flex-direction: column;
-    align-items: unset;
-  }
-}

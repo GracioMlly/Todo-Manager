@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import classes from "./Todo.module.scss";
 import { AiOutlineDelete } from "react-icons/ai";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
@@ -41,7 +41,12 @@ const Todo = ({ todo }) => {
     priority: "",
     deadline: "",
     category: "",
+    subcategory: "",
   });
+
+  const subcategoriesList =
+    categories.find((category) => category.name === formState.category)
+      ?.subcategories ?? [];
 
   const handleChange = (event) => {
     setFormState((prevState) => {
@@ -113,12 +118,31 @@ const Todo = ({ todo }) => {
       });
   };
 
+  useEffect(() => {
+    if (subcategoriesList.length === 0) {
+      setFormState((prev) => {
+        return { ...prev, subcategory: "" };
+      });
+    }
+  }, [formState.category]);
+
   return (
     <>
       <li className={classes.todo}>
         <p>{todo.description}</p>
 
         <div>
+          {todo.subcategory && (
+            <Badge
+              as="p"
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              fontSize="12px"
+            >
+              {todo.subcategory}
+            </Badge>
+          )}
           <Badge
             as="p"
             display="flex"
@@ -172,6 +196,22 @@ const Todo = ({ todo }) => {
               onChange={handleChange}
             >
               {categories.map((category) => (
+                <option key={category.id} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
+            </Select>
+
+            <Select
+              variant="filled"
+              marginTop="40px"
+              cursor="pointer"
+              placeholder="Sous-catégorie"
+              name="subcategory"
+              value={formState.subcategory}
+              onChange={handleChange}
+            >
+              {subcategoriesList.map((category) => (
                 <option key={category.id} value={category.name}>
                   {category.name}
                 </option>

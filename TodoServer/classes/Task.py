@@ -10,6 +10,7 @@ class Task(BaseModel):
     priority: int  # Sa priorité
     deadline: date  # -> Sa deadline / date de fin
     category: str | None = None  # Sa catégorie
+    subcategory: str | None = None  # Sa sous-catégorie
 
     # ** Nous permet de définir un keyword argument dans la définition d'une fonction
     # **args signifie donc que nous attendons un ensemble d'arguments sous forme de paires clé-valeurs
@@ -26,6 +27,10 @@ class Task(BaseModel):
         if self.category == None or self.category == "":
             self.category = "Sans catégorie"
 
+        # Si la tâche n'a pas de sous-catégorie, elle a une valeur par défaut
+        if self.subcategory == None:
+            self.subcategory = ""
+
     # Redéfinition de la méthode de comparaison < : Task1 < Task2
     def __lt__(self, other):
         # La comparaison de deux objets Task se fait par rapport à leur date
@@ -39,8 +44,10 @@ class Task(BaseModel):
         priority: int,
         deadline: date,
         category: str | None = "",
+        subcategory: str | None = ""
     ):
         self.description = description
         self.priority = priority
         self.deadline = deadline
         self.category = category
+        self.subcategory = subcategory
