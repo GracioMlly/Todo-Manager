@@ -14,7 +14,7 @@ class Category(BaseModel):
 
     all_categories_name: ClassVar[list[str]] = [
         "Sans catégorie"
-    ]  # Liste des noms de toutes les catégories crées ~ Variable statique
+    ]  # Liste des noms de toutes les catégories crées ~ Attribut statique
 
     # Utilisation d'un keyword argument ~ args
     def __init__(self, **args):
