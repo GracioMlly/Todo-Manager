@@ -233,7 +233,7 @@ async def create_subcategory(categoryId: str, subcategory: Category):
 # Pour supprimer une sous-catégorie
 # Complexité temporelle : O(n^2)
 @app.delete("/categories/{categoryId}/{subcategoryId}")
-async def delete_category(categoryId: str, subcategoryId: str):
+async def delete_subcategory(categoryId: str, subcategoryId: str):
     # On récupère dans le paramètre 'categoryId' l'id de la category avec l'url /category/{subcategoryId}
     # On récupère dans le paramètre 'subcategoryId' l'id de la sous-catégorie avec l'url /category/{subcategoryId}
     try:
